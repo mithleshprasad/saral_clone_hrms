@@ -1,0 +1,278 @@
+/* ERP Grid Theme — modernized, shares tokens with style.css */
+:root {
+    --erp-bg: var(--bg-body, #f1f5f9);
+    --erp-border: var(--border, #e2e8f0);
+    --erp-header-bg: #f8fafc;
+    --erp-input-bg: #ffffff;
+    --erp-text: var(--text-main, #1e293b);
+    --erp-selected: var(--primary, #004b91);
+    --erp-selected-text: #ffffff;
+    --erp-grid-header: #f8fafc;
+}
+
+body {
+    background-color: var(--bg-body, #eef2f6);
+}
+
+/* Common Layout Containers */
+.erp-container {
+    background: var(--bg-card, #fff);
+    border: 1px solid var(--erp-border);
+    border-radius: 6px;
+    padding: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 12.5px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.erp-toolbar {
+    background: var(--erp-grid-header);
+    border-bottom: 1px solid var(--erp-border);
+    padding: 5px 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 6px;
+    border-radius: 4px 4px 0 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-shrink: 0;
+}
+
+.erp-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.erp-btn {
+    border: 1px solid var(--erp-border);
+    background: #fff;
+    color: var(--erp-text);
+    padding: 4px 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.1s, border-color 0.1s;
+}
+
+.erp-btn:hover {
+    background: #eef2f6;
+    border-color: #b8c6d1;
+}
+
+.erp-btn:active {
+    transform: translateY(0);
+}
+
+.erp-btn i {
+    font-size: 13px;
+    color: var(--primary, #004b91);
+}
+
+/* Primary-styled ERP action (e.g. New / Save) */
+.erp-btn.erp-btn-primary {
+    background: var(--primary, #004b91);
+    border-color: var(--primary, #004b91);
+    color: #fff;
+}
+
+.erp-btn.erp-btn-primary i {
+    color: #fff;
+}
+
+.erp-btn.erp-btn-primary:hover {
+    background: var(--primary-hover, #003a70);
+}
+
+/* Split View Layout */
+.erp-split-view {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    gap: 12px;
+}
+
+.erp-list-pane {
+    width: 250px;
+    border: 1px solid var(--erp-border);
+    border-radius: 4px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.erp-detail-pane {
+    flex: 1;
+    border: 1px solid var(--erp-border);
+    border-radius: 4px;
+    background: var(--erp-bg);
+    padding: 10px;
+    overflow: auto;
+}
+
+/* Forms */
+.erp-form-fieldset {
+    border: 1px solid var(--erp-border);
+    margin-bottom: 10px;
+    padding: 12px 10px 10px;
+    position: relative;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.erp-legend {
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    background: #fff;
+    padding: 0 6px;
+    color: var(--primary, #004b91);
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.erp-form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.erp-label {
+    width: 130px;
+    text-align: right;
+    padding-right: 12px;
+    color: var(--text-muted, #64748b);
+    font-size: 13px;
+}
+
+.erp-input {
+    flex: 1;
+    border: 1px solid var(--erp-border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12.5px;
+    height: 28px;
+    background: var(--erp-input-bg);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.erp-input:focus {
+    border-color: var(--primary, #004b91);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 75, 145, 0.15);
+}
+
+/* Grids / Tables */
+.erp-grid-container {
+    border: 1px solid var(--erp-border);
+    border-radius: 4px;
+    background: #fff;
+    flex: 1;
+    overflow: auto;
+}
+
+.erp-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.erp-table th {
+    background: var(--erp-grid-header);
+    border: 1px solid var(--erp-border);
+    padding: 6px 8px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted, #64748b);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.erp-table td {
+    border: 1px solid #edf1f5;
+    padding: 5px 8px;
+    color: var(--erp-text);
+    font-size: 12.5px;
+}
+
+.erp-table tbody tr {
+    transition: background-color 0.1s;
+}
+
+.erp-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.erp-table tr.selected {
+    background-color: rgba(0, 75, 145, 0.08);
+    color: var(--erp-text);
+}
+
+.erp-table tr.selected:hover {
+    background-color: rgba(0, 75, 145, 0.12);
+}
+
+/* Tabs inside Forms */
+.erp-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--erp-border);
+    margin-bottom: 14px;
+    gap: 2px;
+}
+
+.erp-tab {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-right: 2px;
+    cursor: pointer;
+    color: var(--text-muted, #64748b);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px 6px 0 0;
+    transition: all 0.15s;
+}
+
+.erp-tab:hover {
+    background: #f8fafc;
+    color: var(--erp-text);
+}
+
+.erp-tab.active {
+    background: transparent;
+    font-weight: 600;
+    color: var(--primary, #004b91);
+    border-bottom-color: var(--primary, #004b91);
+}
+
+/* Analytics chart empty-state overlay */
+.chart-empty-msg {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.charts-grid .card h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: var(--text-primary, #1e293b);
+}

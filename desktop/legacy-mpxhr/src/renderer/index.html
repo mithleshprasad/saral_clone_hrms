@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MpxHR Desktop</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/titlebar.css">
+    <link rel="stylesheet" href="css/erp.css">
+    <link rel="stylesheet" href="css/erp-modal.css">
+    <link rel="stylesheet" href="css/ribbon.css">
+    <!-- UI Libraries -->
+    <script src="../../node_modules/chart.js/dist/chart.umd.js"></script>
+    <script src="../../node_modules/jspdf/dist/jspdf.umd.min.js"></script>
+    <script src="../../node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.min.js"></script>
+    <script src="../../node_modules/html2canvas/dist/html2canvas.min.js"></script>
+    <script src="../../node_modules/xlsx/dist/xlsx.full.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* Override Layout for Ribbon */
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            padding-top: 30px;
+            /* Titlebar height */
+        }
+
+        .main-content {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+            background-color: #f0f2f5;
+            padding: 10px;
+        }
+
+        /* Hide Old Sidebar/Header */
+        .sidebar {
+            display: none !important;
+        }
+
+        .header {
+            display: none !important;
+        }
+
+        #btn-tutorial {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+            border: none !important;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+        }
+
+        #btn-tutorial:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        #btn-security-guide {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+            border: none !important;
+            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+        }
+
+        #btn-security-guide:hover {
+            background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+
+<body class="saral-theme saral-dense">
+
+
+    <div id="startup-gateway" class="erp-modal-overlay active"
+        style="z-index: 9000; background: #e0e7ff; display:none; flex-direction:column;">
+        <div
+            style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 800px; height: 500px; display:flex; flex-direction:column;">
+
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:2px solid #007672; padding-bottom:10px;">
+                <h2 style="margin:0; color:#007672;">Select Company</h2>
+                <div style="font-size:12px; color:#666;">F.Y. 2025-2026</div>
+            </div>
+
+            <!-- List -->
+            <div style="flex:1; overflow:auto; border:1px solid #ccc; margin-bottom:15px;">
+                <table class="erp-table" style="width:100%;">
+                    <thead style="background:#f0f0f0; position:sticky; top:0;">
+                        <tr>
+                            <th style="width:50px;">Code</th>
+                            <th>Company Name</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gw-company-list-body">
+                        <!-- Loaded via gateway.js -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Validation/Select Info -->
+            <div style="margin-bottom:15px; background:#fafafa; padding:10px; border:1px solid #eee;">
+                <div style="display:flex; gap:15px;">
+                    <label>F.Y.: <select class="erp-input">
+                            <option>2025-2026</option>
+                        </select></label>
+                    <label>Type: <select class="erp-input">
+                            <option>Main Data</option>
+                        </select></label>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div style="display:flex; justify-content: flex-end; gap: 10px;">
+                <button id="gw-btn-add" class="erp-btn">Add</button>
+                <button id="gw-btn-modify" class="erp-btn">Modify</button>
+                <button id="gw-btn-delete" class="erp-btn">Delete</button>
+                <div style="flex:1"></div>
+                <button id="gw-btn-select" class="btn-blue" style="padding:5px 30px;">Select & Enter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gateway Modal for Add/Edit -->
+    <div id="gw-company-modal" class="erp-modal-overlay" style="z-index: 9100;">
+        <div class="erp-modal-window" style="width:500px; height:auto;">
+            <div class="erp-modal-header">
+                <span id="gw-modal-title">New Company</span>
+                <span class="erp-modal-close"
+                    onclick="document.getElementById('gw-company-modal').style.display='none'">x</span>
+            </div>
+            <div class="erp-modal-body" style="padding:20px;">
+                <input type="hidden" id="gw-comp-id">
+                <div class="form-row">
+                    <label class="form-label">Name:</label>
+                    <input type="text" id="gw-comp-name" class="form-input" style="font-weight:bold;">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Phone:</label>
+                    <input type="text" id="gw-comp-phone" class="form-input">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Address:</label>
+                    <input type="text" id="gw-comp-addr" class="form-input">
+                </div>
+            </div>
+            <div class="erp-modal-footer">
+                <button class="btn-gray"
+                    onclick="document.getElementById('gw-company-modal').style.display='none'">Cancel</button>
+                <button class="btn-teal" onclick="saveGatewayCompany()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app" style="display:none;">
+        <!-- RIBBON UI START -->
+        <div class="ribbon-container">
+            <!-- Row 1: Global Context Bar -->
+            <div class="context-bar">
+                <span class="context-label">Company:</span>
+                <select id="ctx-company" class="context-select">
+                    <option>Loading...</option>
+                </select>
+                <button
+                    onclick="if(confirm('Go back to Company List? Unsaved changes will be lost.')) location.reload()"
+                    title="Back to Company List"
+                    style="margin-left:5px; border:none; background:none; cursor:pointer; color:#6366f1; padding:5px;">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+
+                <div style="width:1px; height:20px; background:#ccc; margin:0 10px;"></div>
+
+                <span class="context-label">F.Y.:</span>
+                <select id="ctx-year" class="context-select">
+                    <option>2025-2026</option>
+                    <option>2024-2025</option>
+                </select>
+
+                <div style="width:1px; height:20px; background:#ccc; margin:0 10px;"></div>
+
+                <span class="context-label">Month:</span>
+                <select id="ctx-month" class="context-select" style="min-width:100px;">
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                </select>
+
+                <div style="flex:1"></div>
+                <div class="user-profile"
+                    style="font-size:12px; color:#555; display:flex; gap:8px; align-items:center; padding-right:15px;">
+
+                    <i class="fas fa-magic" style="color:white;" onclick="startTutorial()" title="Application Tour"></i>
+                    <button onclick="document.getElementById('shortcuts-modal').classList.add('active')"
+                        title="Keyboard Shortcuts"
+                        style="background:none; border:none; cursor:pointer; color:#6366f1; font-size:16px; margin-right:10px;">
+                        <i class="fas fa-keyboard"></i>
+                    </button>
+                    <button id="btn-user-guide"
+                        onclick="window.electronAPI.openUserGuide().catch(e => window.showToast(e.message, 'error'))"
+                        title="User Guide (PDF)"
+                        style="background:none; border:none; cursor:pointer; color:#f59e0b; font-size:16px; margin-right:10px;">
+                        <i class="fas fa-book"></i>
+                    </button>
+                    <button id="btn-support-main"
+                        onclick="document.getElementById('support-modal').classList.add('active')"
+                        title="Contact Support"
+                        style="background:none; border:none; cursor:pointer; color:#10b981; font-size:16px; margin-left:5px;">
+                        <i class="fas fa-headset"></i>
+                    </button>
+                    <button id="btn-logout-main" onclick="logoutApp()" title="Logout"
+                        style="background:none; border:none; cursor:pointer; color:#ef4444; font-size:16px; margin-left:5px;">
+                        <i class="fas fa-power-off"></i>
+                    </button>
+                    <!-- User info inserted here by JS -->
+                </div>
+            </div>
+
+            <!-- Row 2: Tabs -->
+            <div class="ribbon-tabs">
+                <div class="ribbon-tab active" data-tab="dashboard">Dashboard</div>
+                <div class="ribbon-tab" data-tab="masters">Masters</div>
+                <div class="ribbon-tab" data-tab="attendance">Attendance</div>
+                <div class="ribbon-tab" data-tab="payroll">Payroll</div>
+                <div class="ribbon-tab" data-tab="reports">Reports</div>
+                <div class="ribbon-tab" data-tab="documents">Documents</div>
+            </div>
+
+            <!-- Row 3: Toolbar Content -->
+            <div class="ribbon-toolbar" id="ribbon-toolbar-content">
+                <!-- Dynamically Loaded by ribbon.js -->
+            </div>
+        </div>
+        <!-- RIBBON UI END -->
+
+        <div class="main-content">
+            <div id="page-title" style="display:none;"></div> <!-- Hidden but kept for any legacy logic -->
+            <div id="content-area" class="content-area">
+                <!-- Dynamic Content Loaded Here -->
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Support Modal -->
+    <div id="support-modal" class="erp-modal-overlay">
+        <div class="erp-modal-window" style="width: 400px; height: auto; text-align: center;">
+            <div class="erp-modal-header" style="justify-content: center;">
+                <h3 style="margin:0; color:#10b981;"><i class="fas fa-headset"></i> Contact Support</h3>
+                <span class="erp-modal-close" style="position: absolute; right: 20px;"
+                    onclick="document.getElementById('support-modal').classList.remove('active')">&times;</span>
+            </div>
+            <div class="erp-modal-body" style="padding: 30px;">
+                <p style="color:#666; font-size:14px; margin-bottom:20px;">For any assistance or queries, please
+                    contact:</p>
+                <div
+                    style="background:#f0fdf4; border:1px solid #bbf7d0; padding:15px; border-radius:8px; margin-bottom:15px;">
+                    <div style="font-weight:bold; color:#166534; font-size:16px;">Mithlesh Prasad</div>
+                    <div style="margin-top:10px; font-size:14px;">
+                        <i class="fas fa-phone-alt" style="color:#10b981; margin-right:5px;"></i> 7519024725
+                    </div>
+                    <div style="margin-top:5px; font-size:14px;">
+                        <i class="fas fa-envelope" style="color:#10b981; margin-right:5px;"></i>
+                        mithleshprasad58@gmail.com
+                    </div>
+                </div>
+                <button class="btn-blue"
+                    onclick="document.getElementById('support-modal').classList.remove('active')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Security Guide Modal -->
+    <div id="security-guide-modal" class="erp-modal-overlay">
+        <div class="erp-modal-window" style="width: 700px; height: auto;">
+            <div class="erp-modal-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-shield-alt" style="color:#4f46e5;"></i>
+                    <span>Data Security & Backup Guide</span>
+                </div>
+                <span class="erp-modal-close"
+                    onclick="document.getElementById('security-guide-modal').classList.remove('active')">&times;</span>
+            </div>
+
+            <div class="erp-modal-body" style="padding: 20px; line-height: 1.6;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div style="background: #fff; border: 1px solid #ccc; padding: 12px; border-radius: 4px;">
+                        <h4
+                            style="margin:0 0 8px 0; color:#4f46e5; font-size:14px; display:flex; align-items:center; gap:8px;">
+                            <i class="fas fa-file-archive"></i> Full Backups
+                        </h4>
+                        <p style="margin:0; font-size:12px; color:#555;">The <b>Full Backup (.zip)</b> option preserves
+                            your database AND all employee documents/photos.</p>
+                    </div>
+                    <div style="background: #fff; border: 1px solid #ccc; padding: 12px; border-radius: 4px;">
+                        <h4
+                            style="margin:0 0 8px 0; color:#007672; font-size:14px; display:flex; align-items:center; gap:8px;">
+                            <i class="fas fa-cloud-upload-alt"></i> Cloud Sync
+                        </h4>
+                        <p style="margin:0; font-size:12px; color:#555;">Linking to <b>Google Drive</b> ensures your
+                            data is secured off-site automatically.</p>
+                    </div>
+                </div>
+
+                <div style="background:#fff; border:1px solid #ccc; padding:15px; border-radius:4px;">
+                    <h4
+                        style="margin:0 0 10px 0; color:#333; font-size:13px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                        Setup Google Drive Backup:</h4>
+                    <ol style="margin:0; padding-left: 20px; color:#444; font-size:12px;">
+                        <li style="margin-bottom:5px;">Install <b>Google Drive for Desktop</b>.</li>
+                        <li style="margin-bottom:5px;">Locate your <b>HRMS_OFFSITE_BACKUPS</b> folder in Explorer.</li>
+                        <li style="margin-bottom:5px;">In <b>Settings > Database Maintenance</b>, click <b>Change
+                                Folder</b>.</li>
+                        <li>Select the Google Drive folder and Enable <b>"Auto-Backup on Exit"</b>.</li>
+                    </ol>
+                </div>
+
+                <div
+                    style="margin-top:20px; background: #fffde7; border: 1px solid #fbc02d; padding: 10px; border-radius: 4px; display:flex; gap:10px; align-items:flex-start;">
+                    <i class="fas fa-exclamation-triangle" style="color:#f57f17; margin-top:2px;"></i>
+                    <div style="font-size:11px; color:#616161;">
+                        <b>System Corruption Alert:</b> If Windows fails, a local backup will be lost. <b>Always
+                            maintain an off-site copy in the cloud!</b>
+                    </div>
+                </div>
+            </div>
+
+            <div class="erp-modal-footer">
+                <div style="flex:1"></div>
+                <button class="btn-blue" style="padding: 5px 20px;"
+                    onclick="document.getElementById('security-guide-modal').classList.remove('active')">Close
+                    Guide</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shortcuts Modal -->
+    <div id="shortcuts-modal" class="erp-modal-overlay">
+        <div class="erp-modal-window"
+            style="width: 600px; height: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+            <div class="erp-modal-header"
+                style="background: white; border-bottom: 1px solid #e5e7eb; padding: 15px 20px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div
+                        style="width:32px; height:32px; background:#e0e7ff; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#4f46e5;">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div>
+                        <h3 style="margin:0; font-size:16px; color:#1f2937;">Keyboard Shortcuts</h3>
+                        <div style="font-size:11px; color:#6b7280;">Boost your productivity with these quick actions
+                        </div>
+                    </div>
+                </div>
+                <span class="erp-modal-close" style="color:#9ca3af; font-size:20px;"
+                    onclick="document.getElementById('shortcuts-modal').classList.remove('active')">&times;</span>
+            </div>
+            <div class="erp-modal-body" style="padding: 15px; background: #fafafa;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                    <div><b>Ctrl + S</b>: Save</div>
+                    <div><b>Ctrl + N</b>: New</div>
+                    <div><b>Ctrl + E</b>: Edit</div>
+                    <div><b>Del</b>: Delete</div>
+                    <div><b>Ctrl + R</b>: Refresh</div>
+                    <div><b>Ctrl + P</b>: Print</div>
+                    <div><b>Esc</b>: Close</div>
+                </div>
+            </div>
+            <div class="erp-modal-footer" style="background:#fff; border-top:1px solid #e5e7eb; padding:10px 20px;">
+                <button class="btn-gray"
+                    onclick="document.getElementById('shortcuts-modal').classList.remove('active')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div id="tutorial-modal" class="erp-modal-overlay">
+        <div class="erp-modal-window" style="width: 550px; height: auto;">
+            <div class="erp-modal-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-magic" style="color:#4f46e5;"></i>
+                    <span>MpxHR Application Quick Tour</span>
+                </div>
+                <span class="erp-modal-close" onclick="closeTutorial()">&times;</span>
+            </div>
+
+            <div class="erp-modal-body" style="padding: 0;">
+                <!-- Tutorial Step 1: Welcome -->
+                <div id="tut-step-1" class="tutorial-step active">
+                    <div
+                        style="height: 80px;  display:flex; align-items:center; padding: 0 30px; color:rgb(7, 240, 38); gap:20px;">
+                        <div>
+                            <h2 style="margin:0; font-size:20px; letter-spacing:0.5px;">Welcome to MpxHR</h2>
+                            <p style="margin:3px 0 0 0; opacity:0.9; font-size:12px;">Enterprise HR & Payroll Solution
+                            </p>
+                        </div>
+                    </div>
+                    <div style="padding: 25px;">
+                        <p style="font-size:13px; color:#333; line-height:1.6; margin:0;">
+                            This 1-minute tour will show you the key areas of the application to help you get started
+                            quickly.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tutorial Step 2: Ribbon Navigation -->
+                <div id="tut-step-2" class="tutorial-step" style="display:none;">
+                    <div style="padding: 25px;">
+                        <h3
+                            style="margin:0 0 15px 0; color:#4f46e5; font-size:16px; display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-th-large"></i> Ribbon Navigation
+                        </h3>
+                        <p style="font-size:13px; color:#333; margin-bottom:15px;">MpxHR uses an <b>Office-style
+                                Ribbon</b>. Use the top tabs to switch modules:</p>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                            <div style="background:#fff; border:1px solid #ccc; padding:8px; font-size:12px;"><b>•
+                                    Masters</b>: Core data setup</div>
+                            <div style="background:#fff; border:1px solid #ccc; padding:8px; font-size:12px;"><b>•
+                                    Attendance</b>: Tracking records</div>
+                            <div style="background:#fff; border:1px solid #ccc; padding:8px; font-size:12px;"><b>•
+                                    Payroll</b>: Salary processing</div>
+                            <div style="background:#fff; border:1px solid #ccc; padding:8px; font-size:12px;"><b>•
+                                    Reports</b>: Data exports</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial Step 3: Masters -->
+                <div id="tut-step-3" class="tutorial-step" style="display:none;">
+                    <div style="padding: 25px;">
+                        <h3
+                            style="margin:0 0 15px 0; color:#4f46e5; font-size:16px; display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-users"></i> Step 1: Masters
+                        </h3>
+                        <p style="font-size:13px; color:#333; margin-bottom:15px;">Onboard your <b>Employees</b> and set
+                            up Departments, Designations, and Branches first.</p>
+                        <div
+                            style="background: #e1f5fe; border-left: 4px solid #4f46e5; padding: 10px; font-size:12px; color:#01579b;">
+                            <b>Tip:</b> Use the "Bulk Import" features in Reports to save time!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial Step 4: Payroll -->
+                <div id="tut-step-4" class="tutorial-step" style="display:none;">
+                    <div style="padding: 25px;">
+                        <h3
+                            style="margin:0 0 15px 0; color:#4f46e5; font-size:16px; display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-money-check-alt"></i> Step 2: Payroll
+                        </h3>
+                        <p style="font-size:13px; color:#333; margin-bottom:15px;">Calculate monthly salaries and
+                            generate professional <b>Payslips</b> in the Payroll tab with just a few clicks.</p>
+                    </div>
+                </div>
+
+                <!-- Tutorial Step 5: Data Security -->
+                <div id="tut-step-5" class="tutorial-step" style="display:none;">
+                    <div style="padding: 25px;">
+                        <h3
+                            style="margin:0 0 15px 0; color:#d32f2f; font-size:16px; display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-shield-alt"></i> Final: Data Security
+                        </h3>
+                        <p style="font-size:13px; color:#333; margin-bottom:15px;">Your data is precious. Use the
+                            <b>Data Security</b> button to set up automated Google Drive backups.
+                        </p>
+                        <div
+                            style="text-align:center; padding:10px; color:#388e3c; font-weight:bold; border:1px dashed #388e3c; border-radius:4px;">
+                            <i class="fas fa-check-circle"></i> Setup Complete!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="erp-modal-footer">
+                <div id="tutorial-progress" style="font-size:11px; color:#666; font-weight:bold;">Step 1 of 5</div>
+                <div style="display:flex; gap:5px;">
+                    <button id="tut-btn-skip" class="erp-btn" onclick="closeTutorial()">Skip</button>
+                    <button id="tut-btn-prev" class="erp-btn" onclick="prevStep()" style="display:none;">Back</button>
+                    <button id="tut-btn-next" class="btn-blue" onclick="nextStep()"
+                        style="min-width:80px; background:#4f46e5; border-color:#1e1b4b;">Next</button>
+                    <button id="tut-btn-finish" class="btn-teal" onclick="closeTutorial()"
+                        style="display:none; min-width:80px;">Finish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        function startTutorial() {
+            currentStep = 1;
+            updateStepVisibility();
+            document.getElementById('tutorial-modal').classList.add('active');
+        }
+
+        function closeTutorial() {
+            document.getElementById('tutorial-modal').classList.remove('active');
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepVisibility();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepVisibility();
+            }
+        }
+
+        function updateStepVisibility() {
+            // Hide all steps
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`tut-step-${i}`).style.display = 'none';
+            }
+            // Show current
+            document.getElementById(`tut-step-${currentStep}`).style.display = 'block';
+
+            // Update Buttons
+            document.getElementById('tut-btn-prev').style.display = currentStep === 1 ? 'none' : 'block';
+            document.getElementById('tut-btn-next').style.display = currentStep === totalSteps ? 'none' : 'block';
+            document.getElementById('tut-btn-finish').style.display = currentStep === totalSteps ? 'block' : 'none';
+            document.getElementById('tut-btn-skip').style.display = currentStep === totalSteps ? 'none' : 'block';
+
+            // Update Progress
+            document.getElementById('tutorial-progress').textContent = `Step ${currentStep} of ${totalSteps}`;
+        }
+    </script>
+
+    <script>
+        window.onerror = function (msg, url, line, col, error) {
+            const div = document.createElement('div');
+            div.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:white; color:red; z-index:99999; padding:20px; font-family:monospace; white-space:pre-wrap; overflow:auto;';
+            div.innerText = `CRITICAL ERROR:\n\nMessage: ${msg}\nFile: ${url}:${line}:${col}\n\nStack:\n${error?.stack}`;
+            document.body.appendChild(div);
+            // Also try to communicate to Titlebar if possible
+        };
+        window.addEventListener('unhandledrejection', function (e) {
+            const div = document.createElement('div');
+            div.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:white; color:red; z-index:99999; padding:20px; font-family:monospace; white-space:pre-wrap; overflow:auto;';
+            div.innerText = `UNHANDLED PROMISE:\n\nReason: ${e.reason}`;
+            document.body.appendChild(div);
+        });
+    </script>
+
+    <!-- Premium MpxHR Loader -->
+    <div id="global-loader" class="premium-loader-overlay" style="display:none;">
+        <div class="premium-loader-content">
+            <div class="loader-branding">
+                <!-- <div class="loader-ring"></div> -->
+                <div id="loader-logo-container">
+                    <h1 class="loader-logo-text" id="loader-app-name">Mpx<span>HR</span></h1>
+                </div>
+            </div>
+            <!-- <div class="modern-loader-text">Loading Workspace</div> -->
+        </div>
+    </div>
+    <script type="module">
+        // Logic moved to renderer.js 'initApp'
+    </script>
+    <script src="js/renderer.js" type="module"></script>
+    <script src="js/titlebar.js"></script>
+</body>
+
+</html>

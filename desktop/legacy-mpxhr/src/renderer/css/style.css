@@ -1,0 +1,1079 @@
+/* --- HRMS CompuPay-Reference Theme (navy/blue, dense) --- */
+
+:root {
+    /* Core Colors - matched to CompuPay/CompuTax reference screenshots */
+    --primary: #004b91;
+    --primary-hover: #003a70;
+    --primary-light: #e8f1fb;
+    --accent: #0891b2;
+    --bg-body: #eef2f6;
+    --bg-card: #ffffff;
+    --bg-sidebar: #003366;
+
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --text-sidebar: #e2e8f0;
+
+    --border: #d5dbe3;
+
+    /* Variable Mappings for Old Components */
+    --glass-bg: #ffffff;
+    --glass-border: 1px solid #e5e7eb;
+    --glass-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+
+    /* Status Colors */
+    --success-bg: #dcfce7;
+    --success: #15803d;
+    --danger-bg: #fee2e2;
+    --danger: #b91c1c;
+    --warning-bg: #fef3c7;
+    --warning: #b45309;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 20px 40px -8px rgba(15, 23, 42, 0.18);
+
+    /* Spacing */
+    --sidebar-width: 260px;
+    --header-height: 64px;
+}
+
+/* --- Dark Mode Configuration --- */
+body.dark-mode {
+    --bg-body: #0f0f1a;
+    --bg-card: #1a1a2e;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #2e2e45;
+    --bg-sidebar: #0a0a17;
+    --text-sidebar: #e0e7ff;
+    --primary-light: #251f5c;
+}
+
+/* --- Active App Theme Tokens --- */
+body.saral-theme {
+    --primary: #004b91;
+    --primary-hover: #003a70;
+    --bg-body: #eef2f6;
+    --bg-card: #ffffff;
+    --bg-sidebar: #003366;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border: #d5dbe3;
+    --glass-bg: rgba(255, 255, 255, 0.95);
+}
+
+/* Compact dense form and table styles to mimic SaralPayPack UI */
+.saral-dense .modal-content,
+.saral-dense .card {
+    padding: 10px !important;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.saral-dense .form-row {
+    gap: 8px;
+}
+
+.saral-dense .form-group {
+    margin-bottom: 8px;
+}
+
+.saral-dense input,
+.saral-dense select,
+.saral-dense textarea {
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.saral-dense .btn-primary {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.saral-dense .data-table th,
+.saral-dense .data-table td {
+    padding: 8px 10px;
+    font-size: 13px;
+}
+
+/* Small titlebar and denser header */
+.saral-dense .header {
+    height: 56px;
+    padding: 0 18px;
+}
+
+.saral-dense .header h2 {
+    font-size: 1.15rem;
+}
+
+/* Tighter employee card / avatar */
+.saral-dense .user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+}
+
+/* Slight color variations to match SaralPayPack palette */
+.saral-theme .btn-primary {
+    background-color: var(--primary);
+}
+
+.saral-theme .nav-links li.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* Add subtle borders similar to SaralPayPack dialogs */
+.saral-dense .modal-content {
+    border: 1px solid rgba(11, 33, 48, 0.06);
+}
+
+
+/* --- Component Overrides --- */
+/* Sidebar Styles */
+body.sidebar-light {
+    --bg-sidebar: #ffffff;
+    --text-sidebar: #0f172a;
+}
+
+body.sidebar-brand {
+    --bg-sidebar: var(--primary);
+    --text-sidebar: #ffffff;
+}
+
+/* Card Styles */
+body.card-flat .card,
+body.card-flat .stat-card {
+    box-shadow: none;
+    border: 1px solid var(--border);
+}
+
+body.card-elevated .card,
+body.card-elevated .stat-card {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: none;
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 2px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: block;
+    /* Fixed: Removed flex to prevent sidebar gaps */
+}
+
+/* --- Patterns --- */
+body.pattern-dots {
+    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+body.pattern-grid {
+    background-image: linear-gradient(#e2e8f0 1px, transparent 1px),
+        linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* Layout - Vertical Stack for Ribbon */
+#app {
+    display: block;
+    /* Changed from flex for Ribbon */
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar - DEPRECATED for Ribbon UI */
+.sidebar {
+    display: none;
+    /* Hide if present */
+}
+
+/* Sidebar Scrollbar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+    /* Slightly wider */
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Light Mode Sidebar Override */
+body.sidebar-light .sidebar {
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    color: #475569;
+}
+
+.logo-area {
+    margin: 0 0 32px 12px;
+    /* Align with nav items */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+}
+
+.logo-area img {
+    max-width: 36px;
+    max-height: 36px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #3b82f6;
+    padding: 6px;
+    box-shadow: none;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-links li {
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.15s ease-out;
+    color: #94a3b8;
+    /* Inactive color */
+}
+
+/* Hover State - Subtle Lighten */
+.nav-links li:hover {
+    background: #1e293b;
+    color: #f1f5f9;
+}
+
+/* Active State - Vibrant Pill (macOS style) */
+.nav-links li.active {
+    background: var(--primary);
+    /* Primary Dark Blue */
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(0, 75, 145, 0.1), 0 2px 4px -1px rgba(0, 75, 145, 0.06);
+}
+
+/* Icons */
+.nav-links li i {
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+}
+
+/* Section Dividers */
+.nav-links li.mt-auto {
+    margin-top: auto;
+}
+
+.nav-links li#logout-btn {
+    border-top: 1px solid #1e293b;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-radius: 0;
+}
+
+.nav-links li#logout-btn:hover {
+    background: transparent;
+    color: #ef4444;
+}
+
+
+/* Main Area */
+.main-content {
+    /* Flex removed, handled by ribbon positioning */
+    display: block;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    height: 70px;
+    background-color: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Subtle border */
+    transition: all 0.3s ease;
+}
+
+.header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+}
+
+/* User Profile */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-profile span {
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary), #4338ca);
+    /* Gradient Avatar */
+    color: white;
+    border-radius: 50%;
+    /* Circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
+}
+
+/* Content Area */
+.content-area {
+    padding: 10px;
+    /* Reduced padding to fit more */
+    overflow-y: auto;
+    height: calc(100% - 90px);
+    /* Adjust for header height */
+    padding-bottom: 50px;
+}
+
+/* Components */
+.card,
+.stat-card,
+.table-container,
+.modal-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s ease;
+}
+
+.card:hover,
+.stat-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Elements */
+button {
+    cursor: pointer;
+    font-family: inherit;
+    border: none;
+    outline: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    /* Rounded corners */
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+}
+
+.btn-secondary {
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+
+/* Action Buttons (Table Context) */
+.action-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 4px;
+    transition: all 0.2s;
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.action-btn.edit {
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.1);
+}
+
+.action-btn.edit:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.action-btn.delete {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.action-btn.delete:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.action-btn.view {
+    color: #64748b;
+    background: rgba(100, 116, 139, 0.1);
+}
+
+.action-btn.view:hover {
+    background: #64748b;
+    color: white;
+}
+
+
+.btn-danger {
+    background-color: #ef4444;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.active,
+.status-badge.approved,
+.status-badge.present {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.inactive,
+.status-badge.rejected,
+.status-badge.absent {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-badge.pending,
+.status-badge.on-leave {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--text-main);
+    font-size: 13.5px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+/* Kept deliberately low-specificity (equal to the base rule above, wins on
+   source order) so page-specific input styles (e.g. login.html, .form-input)
+   can still override the base rule as before. */
+input[type="checkbox"],
+input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    accent-color: var(--primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 12px;
+    background: #f8fafc;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.875rem;
+}
+
+tbody tr {
+    transition: background-color 0.1s ease;
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.table-container {
+    padding: 0;
+    overflow: auto;
+}
+
+.table-container table {
+    margin: 0;
+}
+
+.table-container th:first-child,
+.table-container td:first-child {
+    padding-left: 20px;
+}
+
+.table-container th:last-child,
+.table-container td:last-child {
+    padding-right: 20px;
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    width: 500px;
+    max-width: 90%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+}
+
+.close-modal {
+    cursor: pointer;
+    font-size: 1.5rem;
+    background: none;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.tab-content {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Modal Improvements */
+.modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* --- Beautiful Loader --- */
+/* --- Premium MpxHR Loader --- */
+.premium-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10000;
+    display: none;
+    pointer-events: none;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out;
+}
+
+#global-loader[style*="display: flex"] {
+    pointer-events: auto;
+}
+
+.premium-loader-content {
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loader-branding {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.loader-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    border: 3px solid transparent;
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loader-ring::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 3px solid transparent;
+    border-top-color: #10b981;
+    /* Success Green */
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+}
+
+.loader-logo-text {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -1px;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    animation: loader-pulse 2s ease-in-out infinite;
+    background: linear-gradient(to right, var(--primary) 0%, #10b981 50%, var(--primary) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: loader-pulse 2s ease-in-out infinite, shimmer 3s linear infinite;
+}
+
+.loader-logo-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    border-radius: 12px;
+}
+
+.loader-logo-text span {
+    -webkit-text-fill-color: #10b981;
+}
+
+.modern-loader-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: fadePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes loader-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+@keyframes fadePulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+@keyframes spin-basic {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- Dashboard 4-Column Layout --- */
+.dash-4-col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+    height: calc(100% - 20px);
+}
+
+.dash-col {
+    background: white;
+    border: 1px solid #d1d5db;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dash-header {
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.dash-header-yellow {
+    background: #6a5acd;
+    /* SlateBlue replacement for readability or custom yellow */
+    background: #8e7cc3;
+    /* Let's match the image closely: Purple/Blue mix? 
+                           The image has: 
+                           1. Recently Viewed: Purple/Blue
+                           2. Request Links: Green
+                           3. Bulk Changes: Blue
+                           4. Utility: Orange/Yellow
+                           Wait, user said "Yellow, Green, Blue, Orange".
+                           Let's stick to the user request or image. 
+                           Image: Recently Viewed (Purple), Request (Green), Bulk (Blue), Utility (Orange).
+                           User prompt said: "Yellow" for Recently Viewed? 
+                           Let's look at image again. 
+                           Col 1: Purple Header "Recently Viewed Pages"
+                           Col 2: Green Header "Request Links"
+                           Col 3: Blue Header "Bulk Changes Links"
+                           Col 4: Orange Header "Utility Links"
+                           
+                           I will follow the IMAGE colors as primary truth if they conflict with text description unless user text was specific. 
+                           User text in my plan said "Yellow...". 
+                           Let's check the plan creation thought.
+                           The plan used "Yellow, Green, Blue, Orange". 
+                           Let's re-examine image.
+                           Image Col 1 is PURPLE. 
+                           I will use Purple for Col 1 to match image "Recently Viewed".
+                        */
+    background: #7c3aed;
+    /* Purple */
+}
+
+.dash-header-green {
+    background: #16a34a;
+    /* Green */
+}
+
+.dash-header-blue {
+    background: var(--primary);
+    /* CompuPay Dark Blue */
+}
+
+.dash-header-orange {
+    background: #f59e0b;
+    /* Orange */
+}
+
+.dash-list {
+    flex: 1;
+    overflow-y: auto;
+    background: #fefce8;
+    /* Light yellow bg for lists as seen in image for some? 
+                          Actually image has light backgrounds. 
+                          Col 1 bg is light yellow. 
+                          Col 2 bg is light blue/white. 
+                          Let's default to white or specific light tints. */
+    background: white;
+}
+
+.dash-list.bg-yellow-tint {
+    background: #fefce8;
+}
+
+.dash-list.bg-blue-tint {
+    background: #f0f9ff;
+}
+
+.dash-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dash-list li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+}
+
+.dash-list li:hover {
+    background: #e5e7eb;
+    color: #111;
+}
+
+.dash-list li i {
+    font-size: 0.8rem;
+    color: #666;
+    width: 16px;
+}
+
+.modern-loader-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #5f6368;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #print-container,
+    #print-container * {
+        visibility: visible;
+    }
+
+    #print-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    @page {
+        margin: 0;
+    }
+}
+
+/* --- Keyboard Shortcuts Modal (Refined UI) --- */
+.kbd-key {
+    display: inline-block;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    padding: 3px 8px;
+    margin: 0 3px;
+    font-family: 'Inter', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #374151;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.1), inset 0 1px 0 #fff;
+    min-width: 24px;
+    text-align: center;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.shortcut-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px 40px;
+    padding: 25px;
+}
+
+.shortcut-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 10px;
+    transition: all 0.2s ease;
+}
+
+.shortcut-item:hover {
+    border-bottom-color: var(--primary);
+    transform: translateX(3px);
+}
+
+.shortcut-desc {
+    font-size: 13.5px;
+    color: #475569;
+    font-weight: 500;
+}
+
+.shortcut-key-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.shortcut-group-title {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.shortcut-group-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, #e2e8f0, transparent);
+}

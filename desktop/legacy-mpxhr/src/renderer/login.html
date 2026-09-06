@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HRMS</title>
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' 'unsafe-inline' data: https://cdnjs.cloudflare.com;">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/titlebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body.login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            padding-top: 32px;
+            background: radial-gradient(circle at 15% 20%, #eef2ff 0%, transparent 45%),
+                        radial-gradient(circle at 85% 80%, #ecfeff 0%, transparent 45%),
+                        #f6f7fb;
+        }
+
+        /* Split Card Design */
+        .login-wrapper {
+            display: flex;
+            width: 900px;
+            height: 550px;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -12px rgba(30, 27, 75, 0.2), 0 0 0 1px rgba(30, 27, 75, 0.04);
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Left Side: Brand */
+        .brand-side {
+            flex: 1;
+            background: linear-gradient(155deg, #4f46e5 0%, #1e1b4b 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Abstract Pattern on Brand Side */
+        .brand-side::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+            animation: rotate 60s linear infinite;
+        }
+
+        .brand-side::after {
+            content: '';
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(6, 182, 212, 0.18);
+            filter: blur(40px);
+            bottom: -80px;
+            right: -80px;
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .brand-logo-large {
+            width: 80px;
+            height: 80px;
+            background: white;
+            color: var(--bg-sidebar);
+            border-radius: 20px;
+            display: grid;
+            place-items: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0 auto 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand-content h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-content p {
+            color: #94a3b8;
+            /* Light slate */
+            font-size: 1.1rem;
+            max-width: 80%;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Right Side: Form */
+        .form-side {
+            flex: 1;
+            background: white;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .form-header p {
+            color: #64748b;
+        }
+
+        /* Custom Input Styling for Login */
+        .login-input-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .login-input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .login-input-group i {
+            position: absolute;
+            left: 15px;
+            top: 42px;
+            /* Adjust based on input height */
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        .login-input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            /* Space for icon */
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #f8fafc;
+            color: #334155;
+            transition: all 0.2s;
+        }
+
+        .login-input-group input:focus {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+        }
+
+        .login-input-group input:focus+i {
+            color: var(--primary);
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            color: white;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -3px rgba(79, 70, 229, 0.35);
+        }
+
+        .footer-links {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .footer-links a {
+            color: var(--bg-sidebar);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #ef4444;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 600;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+
+<body class="login-page saral-theme">
+
+    <div class="login-wrapper">
+        <!-- BRAND SIDE -->
+        <div class="brand-side">
+            <div class="brand-content">
+                <div class="brand-logo-large" id="login-logo-circle">HR</div>
+                <h1 id="company-name-display">MpxHR</h1>
+                <p>Enterprise Human Resource Management System</p>
+            </div>
+        </div>
+
+        <!-- FORM SIDE -->
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Welcome Back</h2>
+                <p>Please enter your credentials to access your dashboard.</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="login-input-group">
+                    <label>User Name</label>
+                    <input type="text" id="username" placeholder="e.g. admin" required>
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="login-input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                <button type="submit" class="btn-login">Sign In <i class="fas fa-arrow-right"
+                        style="margin-left: 8px;"></i></button>
+            </form>
+
+            <div class="footer-links">
+                <p>Having trouble? <a href="#"
+                        onclick="document.getElementById('support-modal').style.display = 'flex'">Contact Support</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Modal -->
+    <div id="support-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9000; justify-content:center; align-items:center;">
+        <div
+            style="background:white; width:400px; padding:30px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2); text-align:center;">
+            <h3 style="margin:0 0 20px 0; color:#10b981;"><i class="fas fa-headset"></i> Contact Support</h3>
+            <div
+                style="background:#f0fdf4; border:1px solid #bbf7d0; padding:15px; border-radius:8px; margin-bottom:20px;">
+                <div style="font-weight:bold; color:#166534; font-size:16px;">Mithlesh Prasad</div>
+                <div style="margin-top:10px; font-size:14px; color:#333;">
+                    <i class="fas fa-phone-alt" style="color:#10b981; margin-right:5px;"></i> 7519024725
+                </div>
+                <div style="margin-top:5px; font-size:14px; color:#333;">
+                    <i class="fas fa-envelope" style="color:#10b981; margin-right:5px;"></i> mithleshprasad58@gmail.com
+                </div>
+            </div>
+            <button onclick="document.getElementById('support-modal').style.display='none'"
+                style="background:#3b82f6; color:white; border:none; padding:8px 20px; border-radius:6px; cursor:pointer;">Close</button>
+        </div>
+    </div>
+
+    <!-- Premium MpxHR Loader -->
+    <div id="global-loader" class="premium-loader-overlay" style="display:none;">
+        <div class="premium-loader-content">
+            <div class="loader-branding">
+                <!-- <div class="loader-ring"></div> -->
+                <div id="loader-logo-container">
+                    <h1 class="loader-logo-text" id="loader-app-name">Mpx<span>HR</span></h1>
+                </div>
+            </div>
+            <div class="modern-loader-text">Authenticating</div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <i class="fas fa-exclamation-circle"></i> <span>Invalid Credentials</span>
+    </div>
+
+    <script src="js/titlebar.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (window.electronAPI) {
+                try {
+                    const settings = await window.electronAPI.getSettings();
+                    const name = settings.find(s => s.key === 'company_name');
+                    const logo = settings.find(s => s.key === 'company_logo');
+                    if (name && name.value) {
+                        document.getElementById('company-name-display').textContent = name.value;
+                        if (document.title) document.title = name.value + " - Login";
+                        const logoCircle = document.getElementById('login-logo-circle');
+                        const logoText = document.getElementById('login-logo-text');
+                        if (logo && logo.value && logo.value.startsWith('data:image')) {
+                            logoCircle.style.background = 'transparent';
+                            logoCircle.style.boxShadow = 'none';
+                            logoCircle.innerHTML = `<img src="${logo.value}" style="width:100%; height:100%; object-fit:contain;">`;
+                        } else {
+                            const initials = name.value.substring(0, 2).toUpperCase();
+                            if (logoText) logoText.textContent = initials;
+                        }
+
+                        // Also Update Global Loader Branding
+                        const loaderAppName = document.getElementById('loader-app-name');
+                        const loaderLogoContainer = document.getElementById('loader-logo-container');
+                        if (loaderAppName) loaderAppName.textContent = name.value;
+                        if (loaderLogoContainer && logo && logo.value && logo.value.startsWith('data:image')) {
+                            loaderLogoContainer.innerHTML = `<img src="${logo.value}" class="loader-logo-img">`;
+                        }
+                    }
+                } catch (e) { console.error("Branding load failed", e); }
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const loader = document.getElementById('global-loader');
+            loader.style.display = 'flex';
+
+            const btn = document.querySelector('.btn-login');
+            const originalText = btn.textContent;
+            btn.textContent = 'Authenticating...';
+            btn.style.opacity = '0.7';
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                if (!window.electronAPI) throw new Error("API Error");
+                const result = await window.electronAPI.login({ username, password });
+                if (result.success) {
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: result.id, username: result.username, role: result.role, employeeId: result.employee_id
+                    }));
+                    window.location.href = 'index.html';
+                } else {
+                    loader.style.display = 'none';
+                    showToast(result.message || 'Invalid Credentials');
+                }
+            } catch (err) {
+                loader.style.display = 'none';
+                showToast(err.message);
+            }
+            finally { btn.textContent = originalText; btn.style.opacity = '1'; }
+        });
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+
+</html>
