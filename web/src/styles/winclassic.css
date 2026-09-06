@@ -1,0 +1,577 @@
+/* Classic Windows line-of-business app skin — replaces the modern "SaaS dashboard" look
+   with the dense, gray, group-boxed, blue-titlebar style used by SaralPayPack/CompuPay-era
+   desktop payroll software. Applied uniformly since the Electron desktop shell just opens
+   this same web app in a native window. */
+
+:root {
+    --win-bg: #ece9d8;
+    --win-panel: #f5f4ee;
+    --win-border: #8f8f8f;
+    --win-border-light: #ffffff;
+    --win-titlebar-start: #2a6fd6;
+    --win-titlebar-end: #103e8f;
+    --win-titlebar-text: #ffffff;
+    --win-input-border: #7f9db9;
+    --win-input-bg: #ffffff;
+    --win-input-disabled: #e8e4d8;
+    --win-btn-start: #4cc3f0;
+    --win-btn-end: #139bdb;
+    --win-btn-border: #0e7fc2;
+    --win-text: #1a1a1a;
+    --win-text-muted: #555;
+    --win-danger-text: #c00000;
+    --win-grid-header: #dce6f5;
+    --win-grid-border: #b8c4d4;
+    --win-selected: #cfe4ff;
+    --win-font: Tahoma, "Segoe UI", "MS Sans Serif", sans-serif;
+}
+
+body {
+    background: var(--win-bg) !important;
+    font-family: var(--win-font) !important;
+    font-size: 12px !important;
+    color: var(--win-text);
+}
+
+.win-app {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--win-bg);
+    overflow: hidden;
+}
+
+/* ---- Persistent faceted-diamond backdrop, shown behind every screen ---- */
+
+.app-bg-diamonds {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background: linear-gradient(115deg, #f7dbe6 0%, #d3e6f6 30%, #dcefdd 60%, #f8efc9 100%);
+}
+
+.app-bg-diamonds .diamond { position: absolute; transform: rotate(45deg); }
+.app-bg-diamonds .d1 { width: 34vw; height: 34vw; left: -8vw; top: -14vw; background: rgba(212,148,188,0.30); }
+.app-bg-diamonds .d2 { width: 28vw; height: 28vw; left: 14vw; top: 12vw; background: rgba(138,178,220,0.26); }
+.app-bg-diamonds .d3 { width: 26vw; height: 26vw; right: 30vw; top: -10vw; background: rgba(148,204,168,0.26); }
+.app-bg-diamonds .d4 { width: 32vw; height: 32vw; right: 2vw; top: 4vw; background: rgba(240,208,138,0.30); }
+.app-bg-diamonds .d5 { width: 24vw; height: 24vw; right: -8vw; top: -12vw; background: rgba(228,168,168,0.26); }
+.app-bg-diamonds .d6 { width: 38vw; height: 38vw; left: 34vw; top: 22vw; background: rgba(255,255,255,0.28); }
+.app-bg-diamonds .d7 { width: 22vw; height: 22vw; left: 4vw; top: 46vw; background: rgba(180,160,220,0.22); }
+
+/* ---- Menu bar (File | Initial Settings | Master | Attendance | ...) ---- */
+
+.menubar-shell {
+    background: linear-gradient(180deg, #f7f7f5, #e2e2de);
+    border-bottom: 1px solid var(--win-border);
+}
+
+.menubar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    background: var(--win-panel);
+    color: var(--win-text);
+    border-bottom: 1px solid var(--win-border);
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.2px;
+}
+
+.menubar-brand i { color: #1a5aa8; }
+
+.menubar-brand .spacer { flex: 1; }
+
+.menubar-context {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--win-text);
+}
+
+.menubar-context select {
+    font-size: 11px;
+    padding: 2px 4px;
+    border: 1px solid var(--win-input-border);
+}
+
+.menubar-logout {
+    background: var(--win-panel);
+    border: 1px solid var(--win-border);
+    color: var(--win-text);
+    padding: 3px 10px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.menubar-logout:hover { background: #cfe4ff; border-color: #6fa8dc; }
+
+.menubar {
+    display: flex;
+    padding: 0 4px;
+    position: relative;
+    /* Above .modal-backdrop's z-index:100 — same reasoning as .mdi-taskbar: a form modal
+       open in one MDI window must not block reaching the menu bar to open another window
+       or switch context. */
+    z-index: 200;
+}
+
+.menubar-item {
+    padding: 5px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    user-select: none;
+}
+
+.menubar-item:hover, .menubar-item.open {
+    background: #cfe4ff;
+    border: 1px solid #6fa8dc;
+}
+
+.menubar-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid var(--win-border);
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.25);
+    min-width: 220px;
+    z-index: 200;
+    padding: 3px 0;
+}
+
+.menubar-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+    padding: 6px 14px;
+    font-size: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--win-text);
+    font-family: var(--win-font);
+}
+
+.menubar-dropdown button:hover, .menubar-dropdown button.focused { background: #cfe4ff; }
+.menubar-item u, .menubar-dropdown button u { text-decoration: underline; }
+.menubar-dropdown .menu-sep { height: 1px; background: #ddd; margin: 3px 6px; }
+
+/* Toolbar row: quick icon buttons under the menu bar */
+.win-toolbar {
+    display: flex;
+    gap: 2px;
+    padding: 3px 6px;
+    background: #f5f4ee;
+    border-bottom: 1px solid var(--win-border);
+    overflow-x: auto;
+}
+
+.win-toolbar-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 46px;
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    font-family: var(--win-font);
+}
+
+.win-toolbar-btn:hover { border: 1px solid #6fa8dc; background: #e4f0ff; }
+.win-toolbar-btn.active { border: 1px solid #4a90d9; background: #cfe4ff; }
+.win-toolbar-btn i { font-size: 16px; color: #1a5aa8; margin-bottom: 2px; }
+.win-toolbar-btn span { font-size: 9.5px; line-height: 1.1; text-align: center; color: #333; }
+
+/* ---- Workspace / MDI desktop ---- */
+
+.win-workspace {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+}
+
+.mdi-desktop {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.mdi-empty-hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--win-text-muted);
+    font-size: 13px;
+    text-align: center;
+    padding: 20px;
+}
+
+.mdi-window {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 3px 3px 12px rgba(0,0,0,0.28);
+    min-width: 320px;
+    min-height: 200px;
+}
+
+.mdi-window.active { box-shadow: 4px 4px 18px rgba(0,0,0,0.4); }
+
+.mdi-window-body {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.mdi-window-body > * { flex: 1; min-height: 0; }
+
+.mdi-taskbar {
+    display: flex;
+    gap: 4px;
+    padding: 4px 6px;
+    background: #e0ddce;
+    border-top: 1px solid var(--win-border);
+    flex-shrink: 0;
+    overflow-x: auto;
+    /* Above .modal-backdrop's z-index:100 — a form modal open in one MDI window must not
+       block switching to a different window via the taskbar. */
+    position: relative;
+    z-index: 200;
+}
+
+.mdi-taskbar-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    background: var(--win-panel);
+    border: 1px solid var(--win-border);
+    cursor: pointer;
+    max-width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+}
+
+.mdi-taskbar-chip span:not(.close-x) { overflow: hidden; text-overflow: ellipsis; }
+.mdi-taskbar-chip.active { background: #cfe4ff; border-color: #4a90d9; }
+.mdi-taskbar-chip.minimized { font-style: italic; opacity: 0.75; }
+.mdi-taskbar-chip i { color: #1a5aa8; }
+.mdi-taskbar-chip .close-x { margin-left: 2px; opacity: 0.55; }
+.mdi-taskbar-chip .close-x:hover { opacity: 1; color: #c00000; }
+
+/* ---- Dialog window (also doubles as MDI window chrome — see DialogWindow.jsx) ---- */
+
+.win-dialog {
+    background: var(--win-panel);
+    border: 1px solid var(--win-border);
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.win-titlebar-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    background: var(--win-panel);
+    border-bottom: 1px solid var(--win-border);
+    color: var(--win-text);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.win-titlebar-bar.draggable { cursor: move; user-select: none; }
+.win-titlebar-bar .win-titlebar-icon { font-size: 12px; color: #1a5aa8; }
+.win-titlebar-bar .spacer { flex: 1; }
+.win-titlebar-bar .win-close {
+    background: #d94f4f;
+    border: 1px solid #a83232;
+    color: #fff;
+    width: 16px; height: 16px;
+    line-height: 14px;
+    text-align: center;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.mdi-window-controls { display: flex; gap: 3px; }
+.win-mdi-btn {
+    background: #e8e4d8;
+    border: 1px solid var(--win-border);
+    color: var(--win-text);
+    width: 17px; height: 16px;
+    line-height: 14px;
+    text-align: center;
+    font-size: 11px;
+    cursor: pointer;
+    user-select: none;
+}
+.win-mdi-btn:hover { background: #cfe4ff; border-color: #6fa8dc; }
+.win-mdi-btn.close { background: #d94f4f; border-color: #a83232; color: #fff; }
+.win-mdi-btn.close:hover { filter: brightness(1.1); }
+
+.win-dialog-body {
+    padding: 12px;
+}
+
+.mdi-window .win-dialog-body { overflow: auto; }
+
+/* ---- Group boxes ---- */
+
+.groupbox {
+    border: 1px solid var(--win-border);
+    border-radius: 2px;
+    margin: 10px 2px 4px;
+    padding: 14px 10px 10px;
+    position: relative;
+}
+
+.groupbox-label {
+    position: absolute;
+    top: -9px;
+    left: 10px;
+    background: var(--win-panel);
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a5aa8;
+}
+
+/* ---- Fields ---- */
+
+.win-row { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-bottom: 8px; }
+
+.win-field { display: flex; align-items: center; gap: 6px; }
+.win-field label {
+    font-size: 11.5px;
+    min-width: 92px;
+    text-align: right;
+    color: var(--win-text);
+}
+.win-field.stack { flex-direction: column; align-items: flex-start; }
+.win-field.stack label { text-align: left; min-width: 0; }
+.win-field.danger label { color: var(--win-danger-text); font-weight: 700; }
+
+.win-app input[type="text"], .win-app input[type="number"], .win-app input[type="date"],
+.win-app input[type="email"], .win-app input[type="password"], .win-app input[type="time"],
+.win-app select, .win-app textarea {
+    font-family: var(--win-font);
+    font-size: 11.5px;
+    padding: 2px 4px;
+    border: 1px solid var(--win-input-border);
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.15);
+    background: var(--win-input-bg);
+    color: var(--win-text);
+    border-radius: 0;
+}
+
+.win-app input:disabled { background: var(--win-input-disabled); color: #777; }
+.win-app input:focus, .win-app select:focus { outline: 1px solid #1a5aa8; }
+
+/* ---- Buttons ---- */
+
+.win-btn {
+    font-family: var(--win-font);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(180deg, var(--win-btn-start), var(--win-btn-end));
+    border: 1px solid var(--win-btn-border);
+    border-radius: 4px;
+    padding: 6px 18px;
+    cursor: pointer;
+}
+
+.win-btn:hover { filter: brightness(1.08); }
+.win-btn:active { filter: brightness(0.95); }
+.win-btn:disabled { filter: grayscale(0.6); opacity: 0.65; cursor: default; }
+.win-btn.danger { background: linear-gradient(180deg, #e46a6a, #c23636); border-color: #a02525; }
+.win-btn.small { padding: 2px 10px; font-size: 11px; }
+.win-btn.outline { background: #f5f4ee; color: var(--win-text); border-color: var(--win-border); }
+
+.win-btn-bar {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 8px 4px 2px;
+    border-top: 1px solid #cfcabb;
+    margin-top: 10px;
+}
+
+/* ---- Status bar ---- */
+
+.win-statusbar {
+    display: flex;
+    gap: 18px;
+    padding: 5px 10px;
+    background: #e0ddce;
+    border-top: 1px solid var(--win-border);
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.win-statusbar .val { color: #103e8f; }
+
+/* ---- Tabs (classic, square) ---- */
+
+.win-tabs { display: flex; gap: 2px; margin: 8px 2px 0; }
+.win-tab {
+    padding: 4px 14px;
+    font-size: 11.5px;
+    background: #e2e2de;
+    border: 1px solid var(--win-border);
+    border-bottom: none;
+    cursor: pointer;
+    position: relative;
+    top: 1px;
+}
+.win-tab.active { background: var(--win-panel); font-weight: 700; color: #1a5aa8; }
+.win-tab-body { border: 1px solid var(--win-border); background: var(--win-panel); padding: 12px; }
+
+/* ---- Grid / table ---- */
+
+table.win-grid {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 11.5px;
+}
+
+table.win-grid th {
+    background: var(--win-grid-header);
+    border: 1px solid var(--win-grid-border);
+    padding: 4px 6px;
+    text-align: left;
+    font-weight: 700;
+    color: #103e8f;
+}
+
+table.win-grid td {
+    border: 1px solid var(--win-grid-border);
+    padding: 3px 6px;
+}
+
+table.win-grid tbody tr:hover td { background: #eef5ff; }
+table.win-grid tbody tr.selected td { background: var(--win-selected); }
+
+/* ---- Radio group ---- */
+
+.win-radio-group { display: flex; gap: 14px; align-items: center; }
+.win-radio-group label { display: flex; align-items: center; gap: 4px; font-size: 11.5px; }
+
+/* ---- Photo/signature boxes ---- */
+
+.win-photobox {
+    width: 84px;
+    height: 92px;
+    border: 1px solid var(--win-border);
+    background: #fff repeating-linear-gradient(45deg, #f4f4f4, #f4f4f4 6px, #fff 6px, #fff 12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 10px;
+    text-align: center;
+}
+
+.win-badge {
+    display: inline-block;
+    padding: 1px 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 8px;
+}
+.win-badge.ok { background: #d8f0d8; color: #1a6b1a; border: 1px solid #9dcf9d; }
+.win-badge.warn { background: #fff2cc; color: #8a6d00; border: 1px solid #e0c46a; }
+.win-badge.bad { background: #fadbdb; color: #a02525; border: 1px solid #e08a8a; }
+.win-badge.neutral { background: #e2e2de; color: #444; border: 1px solid #bbb; }
+
+/* Inline "Menu → Submenu" breadcrumb reference, e.g. in the User Guide */
+.path-like {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.92em;
+    background: var(--win-input-bg, #eef1f3);
+    border: 1px solid var(--win-border, #ccc);
+    border-radius: 4px;
+    padding: 1px 5px;
+}
+
+kbd {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 11px;
+    background: var(--win-panel, #e0ddce);
+    border: 1px solid var(--win-border, #ccc);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 1px 6px;
+}
+
+/* ---- Home backdrop: the permanent "desktop" every screen floats above ---- */
+
+.home-backdrop {
+    height: 100%;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.home-backdrop-mark {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.home-backdrop-mark i {
+    font-size: 44px;
+    color: #1a5aa8;
+}
+
+.home-backdrop-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #103e8f;
+    letter-spacing: 0.3px;
+    text-align: left;
+}
+
+.home-backdrop-tagline {
+    margin-top: 3px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #5a5a5a;
+    text-align: left;
+}
+
+.home-backdrop-hint {
+    margin-top: 18px;
+    font-size: 12px;
+    color: #666;
+}

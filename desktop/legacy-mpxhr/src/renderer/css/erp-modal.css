@@ -1,0 +1,257 @@
+/* ERP Modal System — modernized, shares tokens with style.css */
+.erp-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.erp-modal-overlay.active {
+    display: flex;
+    animation: erpFadeIn 0.15s ease-out;
+}
+
+@keyframes erpFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.erp-modal-window {
+    background: #fff;
+    border: 1px solid #9aa8b5;
+    box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.3);
+    border-radius: 5px;
+    width: 750px;
+    max-width: 95%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 12.5px;
+    overflow: hidden;
+    animation: erpSlideUp 0.15s ease-out;
+}
+
+@keyframes erpSlideUp {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header */
+.erp-modal-header {
+    background: linear-gradient(to bottom, #fff, #eef2f6);
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--primary, #004b91);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+    user-select: none;
+}
+
+.erp-modal-close {
+    cursor: pointer;
+    color: var(--text-muted, #64748b);
+    font-weight: normal;
+    font-size: 16px;
+    height: 28px;
+    width: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+
+.erp-modal-close:hover {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+/* Body */
+.erp-modal-body {
+    padding: 12px;
+    flex: 1;
+    overflow-y: auto;
+    background: #fff;
+}
+
+/* Footer */
+.erp-modal-footer {
+    padding: 8px 12px;
+    background: #eef2f6;
+    border-top: 1px solid var(--border, #e2e8f0);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.form-row {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.form-label {
+    width: 130px;
+    font-weight: 500;
+    color: var(--text-muted, #64748b);
+    font-size: 12.5px;
+}
+
+.form-input {
+    flex: 1;
+    padding: 4px 8px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 4px;
+    background: #fff;
+    font-size: 12.5px;
+    height: 28px;
+    box-sizing: border-box;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+textarea.form-input {
+    height: auto;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.form-input:focus {
+    border-color: var(--primary, #004b91);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 75, 145, 0.12);
+}
+
+.erp-fieldset {
+    border: 1px solid var(--border, #e2e8f0);
+    padding: 12px 10px 10px;
+    margin-bottom: 10px;
+    position: relative;
+    background: #fafbfc;
+    border-radius: 4px;
+}
+
+.erp-legend {
+    position: absolute;
+    top: -11px;
+    left: 12px;
+    background: #fff;
+    padding: 0 6px;
+    font-weight: 600;
+    color: var(--primary, #004b91);
+    font-size: 12px;
+}
+
+/* Buttons */
+.erp-btn,
+.btn-primary,
+.btn-teal,
+.btn-blue,
+.btn-gray {
+    padding: 4px 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 500;
+    min-width: 56px;
+    transition: background-color 0.1s ease;
+}
+
+.erp-btn {
+    background: #fff;
+    border-color: var(--border, #e2e8f0);
+    color: var(--text-main, #1e293b);
+}
+
+.erp-btn:hover {
+    background: #eef2f6;
+    border-color: #b8c6d1;
+}
+
+.btn-teal {
+    background: #10b981;
+    color: white;
+}
+
+.btn-teal:hover {
+    background: #0d9c6f;
+}
+
+.btn-blue,
+.btn-primary {
+    background: var(--primary, #004b91);
+    color: white;
+}
+
+.btn-blue:hover,
+.btn-primary:hover {
+    background: var(--primary-hover, #003a70);
+}
+
+.btn-gray {
+    background: #64748b;
+    color: white;
+}
+
+.btn-gray:hover {
+    background: #475569;
+}
+
+/* Tabs inside Modal */
+.modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    margin-bottom: 14px;
+    gap: 2px;
+}
+
+.modal-tab {
+    padding: 8px 16px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-right: 2px;
+    border-radius: 6px 6px 0 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted, #64748b);
+    transition: all 0.15s;
+}
+
+.modal-tab:hover {
+    background: #f8fafc;
+    color: var(--text-main, #1e293b);
+}
+
+.modal-tab.active {
+    background: transparent;
+    font-weight: 600;
+    color: var(--primary, #004b91);
+    border-bottom-color: var(--primary, #004b91);
+}
+
+.form-col {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.form-col label {
+    font-weight: 600;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: var(--text-muted, #64748b);
+}

@@ -1,0 +1,22 @@
+.attendance-controls {
+    background-color: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.attendance-controls input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-primary);
+    color: white;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}

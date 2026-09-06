@@ -1,0 +1,53 @@
+.dept-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    height: 100%;
+}
+
+.column-section {
+    background-color: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+.column-section .header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.list-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.list-item {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-item .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-item small {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.empty-msg {
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 20px;
+}

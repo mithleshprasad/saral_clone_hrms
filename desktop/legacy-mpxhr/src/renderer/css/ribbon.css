@@ -1,0 +1,167 @@
+/* Ribbon UI — modernized */
+:root {
+    --ribbon-bg: #ffffff;
+    --ribbon-border: var(--border, #e2e8f0);
+    --ribbon-tab-active-bg: #ffffff;
+    --ribbon-tab-text: #64748b;
+    --ribbon-tab-active-text: var(--primary, #004b91);
+    --ribbon-btn-hover: #f0f7ff;
+    --context-bar-bg: var(--bg-sidebar, #003366);
+    --context-text: #ffffff;
+    --primary-blue: var(--primary, #004b91);
+}
+
+/* Container */
+.ribbon-container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--ribbon-bg);
+    border-bottom: 1px solid var(--ribbon-border);
+    user-select: none;
+    height: 140px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+/* Row 1: Global Context Bar */
+.context-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--context-bar-bg);
+    padding: 4px 14px;
+    height: 34px;
+    font-size: 13px;
+    gap: 15px;
+}
+
+.context-label {
+    font-weight: 600;
+    color: #fff;
+    margin-right: 5px;
+    opacity: 0.85;
+}
+
+.context-select {
+    padding: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    font-size: 12.5px;
+    min-width: 150px;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1e293b;
+}
+
+/* Row 2: Tabs */
+.ribbon-tabs {
+    display: flex;
+    padding-top: 6px;
+    padding-left: 12px;
+    background: var(--primary, #004b91);
+    gap: 2px;
+}
+
+.ribbon-tab {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    color: rgba(255, 255, 255, 0.75);
+    position: relative;
+    top: 1px;
+    transition: all 0.15s ease;
+}
+
+.ribbon-tab:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.ribbon-tab.active {
+    background-color: var(--ribbon-tab-active-bg);
+    color: var(--primary-blue);
+    font-weight: 600;
+    z-index: 10;
+}
+
+/* Row 3: Toolbar (Content) */
+.ribbon-toolbar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    background-color: #fff;
+    gap: 6px;
+    overflow-x: auto;
+}
+
+/* Toolbar Groups (Separators) */
+.ribbon-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-right: 12px;
+    margin-right: 4px;
+    border-right: 1px solid #f1f5f9;
+    height: 100%;
+}
+
+.ribbon-group-label {
+    position: absolute;
+    bottom: 2px;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+/* Buttons */
+.ribbon-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 62px;
+    height: 68px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    color: #475569;
+    transition: all 0.15s ease;
+    padding: 5px;
+}
+
+.ribbon-btn:hover {
+    background-color: var(--ribbon-btn-hover);
+    border-color: #dbeafe;
+    transform: translateY(-1px);
+}
+
+.ribbon-btn i {
+    font-size: 22px;
+    margin-bottom: 5px;
+    color: var(--primary-blue);
+}
+
+.ribbon-btn span {
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Small horizontal button variant */
+.ribbon-btn-small {
+    flex-direction: row;
+    height: 26px;
+    min-width: auto;
+    padding: 3px 10px;
+    gap: 6px;
+    border-radius: 6px;
+}
+
+.ribbon-btn-small i {
+    font-size: 13px;
+    margin-bottom: 0;
+}

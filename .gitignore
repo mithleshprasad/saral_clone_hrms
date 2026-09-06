@@ -1,0 +1,69 @@
+# Node dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+.env
+.env.*
+.env.local
+!.env.example
+
+# Build outputs
+dist/
+build/
+out/
+.release/
+*.tgz
+
+# Coverage and test output
+coverage/
+.nyc_output/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Caches
+.cache/
+.parcel-cache/
+
+# Electron / builder artifacts
+builder-cache/
+winCodeSign/
+appxAssets/
+
+# Uploads and user data (optional: remove if you want to track uploads)
+uploads/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database files
+*.sqlite
+*.db
+
+# Misc
+*.log.*
+*.bak
+
+# Built installer — a regenerable build artifact (desktop/ -> npm run dist), not source;
+# ~90MB+ binary that shouldn't live in git history.
+marketing/public/downloads/*.exe
+
+# Uncomment to ignore package lock if desired
+# package-lock.json
