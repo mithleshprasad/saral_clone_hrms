@@ -120,6 +120,7 @@ async function migrate() {
         port: env.db.port,
         user: env.db.user,
         password: env.db.password,
+        ssl: env.db.ssl,
         multipleStatements: true,
     });
 
@@ -134,6 +135,7 @@ async function migrate() {
         user: env.db.user,
         password: env.db.password,
         database: env.db.database,
+        ssl: env.db.ssl,
         multipleStatements: true,
     });
 

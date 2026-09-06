@@ -9,6 +9,9 @@ module.exports = {
         user: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_NAME || 'mpxhr_license_server',
+        // Local MySQL needs none of this; a managed host (Aiven, PlanetScale, etc.) refuses
+        // a plain connection outright. DB_SSL=true switches it on without touching local dev.
+        ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false' } : undefined,
     },
     jwt: {
         secret: process.env.JWT_SECRET || 'dev-license-secret-change-me',

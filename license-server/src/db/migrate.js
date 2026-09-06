@@ -62,7 +62,7 @@ async function ensureColumn(conn, database, table, column, definition) {
 async function migrate() {
     const rootConn = await mysql.createConnection({
         host: env.db.host, port: env.db.port, user: env.db.user, password: env.db.password,
-        multipleStatements: true,
+        ssl: env.db.ssl, multipleStatements: true,
     });
     await rootConn.query(
         `CREATE DATABASE IF NOT EXISTS \`${env.db.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`
@@ -71,7 +71,7 @@ async function migrate() {
 
     const conn = await mysql.createConnection({
         host: env.db.host, port: env.db.port, user: env.db.user, password: env.db.password,
-        database: env.db.database, multipleStatements: true,
+        database: env.db.database, ssl: env.db.ssl, multipleStatements: true,
     });
 
     const schemaSql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
