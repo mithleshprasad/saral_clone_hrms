@@ -17,6 +17,9 @@ module.exports = {
         secret: process.env.JWT_SECRET || 'dev-secret-change-me',
         expiresIn: process.env.JWT_EXPIRES_IN || '8h',
     },
+    // Encrypts Google Sheet sync connection secrets at rest (utils/secureStore.js). Change
+    // this from the dev default before storing any real connection.
+    encryptionKey: process.env.ENCRYPTION_KEY || 'dev-encryption-key-change-me',
     // Three separate frontends (web/ess/superadmin) call this one API from three origins.
     // CORS_ORIGIN accepts a comma-separated list; defaults cover all three dev ports.
     corsOrigins: (process.env.CORS_ORIGIN || 'http://localhost:5173,http://localhost:5174,http://localhost:5175')

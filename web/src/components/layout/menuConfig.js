@@ -36,6 +36,7 @@ export const MENUS = [
             { label: 'Holidays', icon: 'fa-umbrella-beach', to: '/holidays' },
             { type: 'sep' },
             { label: 'Statutory Settings', icon: 'fa-cogs', to: '/settings' },
+            { label: 'Google Sheet Sync', icon: 'fa-table', to: '/google-sheet-sync' },
         ],
     },
     {

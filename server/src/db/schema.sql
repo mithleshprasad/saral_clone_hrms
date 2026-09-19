@@ -804,4 +804,59 @@ CREATE TABLE IF NOT EXISTS letters (
     FOREIGN KEY (generated_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ---------------------------------------------------------------------------
+-- Google Sheets sync — a customer connects their own Google Sheet by pasting a small
+-- Apps Script into it (Extensions > Apps Script) and deploying it as a web app under
+-- THEIR OWN Google account; MpxHR only ever talks to that URL with a shared secret.
+-- No OAuth, no Google Cloud project, no app-verification wait on our side.
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS google_sheet_connections (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    script_url VARCHAR(1000) NOT NULL,
+    secret VARCHAR(500) NOT NULL, -- AES-256-GCM encrypted at rest, see utils/secureStore.js
+    tabs TEXT, -- JSON array of tab names, refreshed on demand
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS google_sync_mappings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    connection_id INT NOT NULL,
+    table_name VARCHAR(50) NOT NULL,
+    sheet_tab VARCHAR(255) NOT NULL,
+    direction VARCHAR(10) NOT NULL DEFAULT 'export', -- export (DB -> Sheet) | import (Sheet -> review queue)
+    column_mapping TEXT, -- JSON {dbColumn: sheetHeader}
+    last_synced_at DATETIME,
+    last_status VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (connection_id) REFERENCES google_sheet_connections(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS google_sync_review_queue (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mapping_id INT NOT NULL,
+    dedupe_key VARCHAR(255), -- the table's natural key value, or "row:N" when it has none
+    row_data TEXT NOT NULL, -- JSON candidate row, never written to the real table until approved
+    status VARCHAR(20) NOT NULL DEFAULT 'Pending', -- Pending | Approved | Rejected
+    result_message VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at DATETIME,
+    UNIQUE KEY uq_gsync_queue_dedupe (mapping_id, dedupe_key),
+    FOREIGN KEY (mapping_id) REFERENCES google_sync_mappings(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS google_sync_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mapping_id INT,
+    direction VARCHAR(10),
+    status VARCHAR(20),
+    rows_count INT DEFAULT 0,
+    message VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (mapping_id) REFERENCES google_sync_mappings(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 SET FOREIGN_KEY_CHECKS = 1;

@@ -27,6 +27,7 @@ import Companies from '../pages/masters/Companies';
 import TaxDeclarationsAdmin from '../pages/masters/TaxDeclarationsAdmin';
 import Letters from '../pages/masters/Letters';
 import StatutoryFiles from '../pages/masters/StatutoryFiles';
+import GoogleSheetSync from '../pages/masters/GoogleSheetSync';
 
 import Attendance from '../pages/attendance/Attendance';
 import AttendanceConfig from '../pages/attendance/AttendanceConfig';
@@ -78,6 +79,7 @@ export default function AppRoutes() {
             <Route path="/tax-declarations" element={<TaxDeclarationsAdmin />} />
             <Route path="/letters" element={<Letters />} />
             <Route path="/statutory-files" element={<StatutoryFiles />} />
+            <Route path="/google-sheet-sync" element={<GoogleSheetSync />} />
             <Route path="/import-export" element={<ImportExport />} />
 
             <Route path="/attendance" element={<Attendance />} />

@@ -46,6 +46,7 @@ const perquisitesRoutes = require('./routes/perquisites.routes');
 const shiftRosterRoutes = require('./routes/shiftRoster.routes');
 const interviewsRoutes = require('./routes/interviews.routes');
 const essRoutes = require('./routes/ess.routes');
+const googleSyncRoutes = require('./routes/googleSync.routes');
 
 const app = express();
 
@@ -106,6 +107,7 @@ app.use('/api/fnf-settlements', fnfSettlementsRoutes);
 app.use('/api/attendance-configs', attendanceConfigsRoutes);
 app.use('/api/report-writer', reportWriterRoutes);
 app.use('/api/assets', assetsRoutes);
+app.use('/api/google-sync', googleSyncRoutes);
 app.use('/api/jobs', jobsRoutes);
 app.use('/api/candidates', candidatesRoutes);
 app.use('/api/onboarding-tasks', onboardingTasksRoutes);
